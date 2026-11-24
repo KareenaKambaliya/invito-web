@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INVITO | Bulk WhatsApp Invitation Web Suite</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo-wrap">
+                    <i class="ph ph-envelope-open brand-icon"></i>
+                </div>
+                <div>
+                    <h2>INVITO</h2>
+                    <span class="brand-sub">Bulk Web Suite</span>
+                </div>
+            </div>
+
+            <nav class="menu">
+                <a href="#dashboard" class="menu-item active" data-tab="tab-dashboard">
+                    <i class="ph ph-squares-four"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#position" class="menu-item" data-tab="tab-position">
+                    <i class="ph ph-crosshair"></i>
+                    <span>Position Editor</span>
+                </a>
+                <a href="#contacts" class="menu-item" data-tab="tab-contacts">
+                    <i class="ph ph-users"></i>
+                    <span>Contacts List</span>
+                    <span class="badge" id="sidebar-contact-count">0</span>
+                </a>
+                <a href="#message" class="menu-item" data-tab="tab-message">
+                    <i class="ph ph-chat-centered-text"></i>
+                    <span>Message Template</span>
+                </a>
+                <a href="#generation" class="menu-item" data-tab="tab-generation">
+                    <i class="ph ph-file-pdf"></i>
+                    <span>Generated Cards</span>
+                    <span class="badge" id="sidebar-card-count">0</span>
+                </a>
+                <a href="#dispatcher" class="menu-item" data-tab="tab-dispatcher">
+                    <i class="ph ph-whatsapp-logo"></i>
+                    <span>WhatsApp Dispatcher</span>
+                </a>
+                <a href="#settings" class="menu-item" data-tab="tab-settings">
+                    <i class="ph ph-gear-six"></i>
+                    <span>Settings & Deploy</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="template-mini-badge">
+                    <i class="ph ph-check-circle" id="sidebar-tpl-icon"></i>
+                    <div class="tpl-info">
+                        <span class="tpl-name" id="sidebar-tpl-name">template.pdf</span>
+                        <span class="tpl-status" id="sidebar-tpl-status">Ready</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div>
+                    <h1 id="page-title">Dashboard</h1>
+                    <p class="tagline" id="page-subtitle">Welcome to your complete bulk invitation web platform.</p>
+                </div>
+                <div class="top-bar-actions">
+                    <div class="status-badge idle" id="status-badge">
+                        <span class="dot"></span>
+                        <span class="text">System Ready</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Notification Toast Container -->
+            <div id="toast-container" class="toast-container"></div>
+
+            <!-- TAB 1: DASHBOARD -->
+            <section id="tab-dashboard" class="tab-pane active">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-indigo">
+                            <i class="ph ph-users-three"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">Total Contacts</span>
+                            <h3 class="metric-value" id="dash-contacts-count">0</h3>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon bg-emerald">
+                            <i class="ph ph-file-pdf"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">Template Pages</span>
+                            <h3 class="metric-value" id="dash-template-pages">-</h3>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon bg-amber">
+                            <i class="ph ph-palette"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">Cards Generated</span>
+                            <h3 class="metric-value" id="dash-generated-count">0</h3>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon bg-green">
+                            <i class="ph ph-paper-plane-tilt"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">WhatsApp Sent</span>
+                            <h3 class="metric-value" id="dash-sent-count">0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Workflow Roadmap -->
+                <div class="glass-card workflow-card">
+                    <div class="card-header">
+                        <h3><i class="ph ph-navigation-arrow"></i> 4-Step Quick Workflow</h3>
+                    </div>
+                    <div class="steps-flow">
+                        <div class="flow-step" onclick="switchTab('tab-contacts')">
+                            <div class="step-num">1</div>
+                            <div class="step-title">Upload Contacts</div>
+                            <p class="step-desc">Excel (.xlsx) or CSV</p>
+                        </div>
+                        <div class="flow-divider"><i class="ph ph-caret-right"></i></div>
+                        <div class="flow-step" onclick="switchTab('tab-position')">
+                            <div class="step-num">2</div>
+                            <div class="step-title">Position Name</div>
+                            <p class="step-desc">Drag & drop on template</p>
+                        </div>
+                        <div class="flow-divider"><i class="ph ph-caret-right"></i></div>
+                        <div class="flow-step" onclick="switchTab('tab-generation')">
+                            <div class="step-num">3</div>
+                            <div class="step-title">Generate Cards</div>
+                            <p class="step-desc">Batch create PDFs & ZIP</p>
+                        </div>
+                        <div class="flow-divider"><i class="ph ph-caret-right"></i></div>
+                        <div class="flow-step" onclick="switchTab('tab-dispatcher')">
+                            <div class="step-num">4</div>
+                            <div class="step-title">Send WhatsApp</div>
+                            <p class="step-desc">Web queue or runner</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Quick Upload Section -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3><i class="ph ph-cloud-arrow-up"></i> Quick Files Upload</h3>
+                        </div>
+                        <p class="subtitle">Quickly replace contact sheet or base invitation template.</p>
+                        
+                        <div class="upload-dual-grid">
+                            <div class="upload-dropzone" id="quick-contacts-drop">
+                                <i class="ph ph-file-xls upload-dropzone-icon text-indigo"></i>
+                                <h4>Contacts Excel / CSV</h4>
+                                <p>Click to browse or drag file</p>
+                                <input type="file" id="input-contacts-file" accept=".xlsx,.xls,.csv" hidden>
+                                <span class="upload-pill" id="quick-contacts-pill">Sample Loaded</span>
+                            </div>
+
+                            <div class="upload-dropzone" id="quick-template-drop">
+                                <i class="ph ph-file-pdf upload-dropzone-icon text-emerald"></i>
+                                <h4>Invitation Template</h4>
+                                <p>PDF or JPG/PNG image</p>
+                                <input type="file" id="input-template-file" accept=".pdf,.jpg,.jpeg,.png" hidden>
+                                <span class="upload-pill" id="quick-template-pill">template.pdf</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3><i class="ph ph-lightning"></i> Instant Actions</h3>
+                        </div>
+                        <p class="subtitle">One-click operational triggers.</p>
+                        
+                        <div class="quick-action-btns">
+                            <button class="btn btn-primary" onclick="switchTab('tab-position')">
+                                <i class="ph ph-crosshair"></i> Open Visual Position Editor
+                            </button>
+                            <button class="btn btn-secondary" onclick="startBatchGeneration()">
+                                <i class="ph ph-play"></i> Generate All Invitations
+                            </button>
+                            <button class="btn btn-secondary" onclick="downloadAllZip()">
+                                <i class="ph ph-download-simple"></i> Download All as ZIP
+                            </button>
+                            <button class="btn btn-whatsapp" onclick="switchTab('tab-dispatcher')">
+                                <i class="ph ph-whatsapp-logo"></i> Open WhatsApp Web Queue
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: POSITION EDITOR -->
+            <section id="tab-position" class="tab-pane">
+                <div class="editor-layout">
+                    <!-- Canvas Area -->
+                    <div class="glass-card canvas-card">
+                        <div class="canvas-toolbar">
+                            <div class="toolbar-group">
+                                <button class="btn-tool" id="btn-page-prev" onclick="prevTemplatePage()" title="Previous Page">
+                                    <i class="ph ph-caret-left"></i>
+                                </button>
+                                <span class="page-indicator" id="page-indicator">Page 1 of 1</span>
+                                <button class="btn-tool" id="btn-page-next" onclick="nextTemplatePage()" title="Next Page">
+                                    <i class="ph ph-caret-right"></i>
+                                </button>
+                            </div>
+
+                            <div class="toolbar-group">
+                                <button class="btn-tool" onclick="zoomCanvas(0.1)" title="Zoom In"><i class="ph ph-magnifying-glass-plus"></i></button>
+                                <span class="zoom-level" id="zoom-level">100%</span>
+                                <button class="btn-tool" onclick="zoomCanvas(-0.1)" title="Zoom Out"><i class="ph ph-magnifying-glass-minus"></i></button>
+                                <button class="btn-tool" onclick="resetZoom()" title="Fit to Screen"><i class="ph ph-arrows-out"></i> Fit</button>
+                            </div>
+
+                            <div class="toolbar-group">
+                                <button class="btn-tool" onclick="centerNameHorizontally()" title="Center Horizontally">
+                                    <i class="ph ph-align-center-horizontal"></i> Center
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="canvas-viewport" id="canvas-viewport">
+                            <canvas id="position-canvas"></canvas>
+                            <div class="canvas-loader" id="canvas-loader">
+                                <i class="ph ph-spinner ph-spin"></i>
+                                <span>Rendering page...</span>
+                            </div>
+                        </div>
+
+                        <div class="canvas-footer-hints">
+                            <span><i class="ph ph-cursor-click"></i> Click anywhere or drag the name box to position</span>
+                            <span><i class="ph ph-arrows-clockwise"></i> Arrow keys for 1px adjustment (Shift+Arrows for 10px)</span>
+                        </div>
+                    </div>
+
+                    <!-- Editor Controls Sidebar -->
+                    <div class="glass-card controls-card">
+                        <div class="card-header">
+                            <h3><i class="ph ph-sliders"></i> Position & Typography</h3>
+                        </div>
+                        <p class="subtitle">Fine-tune the name coordinates, size, and style.</p>
+
+                        <div class="control-form">
+                            <div class="form-group">
+                                <label for="editor-sample-name">Sample Contact Name</label>
+                                <input type="text" id="editor-sample-name" class="input-text" value="માનનીય શ્રી રમેશભાઈ પટેલ">
+                                <span class="form-hint">Supports Gujarati Unicode & English</span>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="slider-header">
+                                    <label for="editor-fontsize">Font Size</label>
+                                    <span class="slider-val" id="fontsize-val">36 pt</span>
+                                </div>
+                                <input type="range" id="editor-fontsize" min="14" max="72" value="36" class="slider-range">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Font Color</label>
+                                <div class="color-picker-row">
+                                    <input type="color" id="editor-color-picker" value="#dc0e0e" class="color-input">
+                                    <div class="color-presets">
+                                        <button class="color-swatch" style="background:#dc0e0e" onclick="setColor('#dc0e0e')" title="Crimson Red"></button>
+                                        <button class="color-swatch" style="background:#ea580c" onclick="setColor('#ea580c')" title="Deep Orange"></button>
+                                        <button class="color-swatch" style="background:#d97706" onclick="setColor('#d97706')" title="Royal Amber"></button>
+                                        <button class="color-swatch" style="background:#1e3a8a" onclick="setColor('#1e3a8a')" title="Deep Navy"></button>
+                                        <button class="color-swatch" style="background:#111827" onclick="setColor('#111827')" title="Classic Dark"></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="coordinates-box">
+                                <div class="coord-item">
+                                    <span class="coord-label">PDF X</span>
+                                    <span class="coord-val" id="coord-pdf-x">283.0 pt</span>
+                                </div>
+                                <div class="coord-item">
+                                    <span class="coord-label">PDF Y</span>
+                                    <span class="coord-val" id="coord-pdf-y">156.5 pt</span>
+                                </div>
+                                <div class="coord-item">
+                                    <span class="coord-label">Target Page</span>
+                                    <span class="coord-val" id="coord-page">1</span>
+                                </div>
+                            </div>
+
+                            <div class="editor-action-buttons">
+                                <button class="btn btn-secondary" onclick="previewExactBackendRender()" id="btn-preview-render">
+                                    <i class="ph ph-eye"></i> Preview Real PDF
+                                </button>
+                                <button class="btn btn-primary" onclick="saveNamePosition()" id="btn-save-pos">
+                                    <i class="ph ph-floppy-disk"></i> Save Position
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: CONTACTS -->
+            <section id="tab-contacts" class="tab-pane">
+                <div class="contacts-page-layout">
+                    <!-- Dropzones Row -->
+                    <div class="contacts-upload-row">
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="ph ph-file-xls"></i> Contacts Upload</h3>
+                            </div>
+                            <p class="subtitle">Upload your contacts sheet. 
+                                <a href="/api/download-template" class="text-primary" style="margin-left: 8px;">
+                                    <i class="ph ph-download-simple"></i> Download Template
+                                </a>
+                            </p>
+                            <div class="upload-area" id="contacts-upload-area">
+                                <i class="ph ph-upload-simple upload-icon"></i>
+                                <p>Drag & Drop or <span class="text-primary">Click to Browse</span></p>
+                                <input type="file" id="contacts-file-input" accept=".xlsx, .xls, .csv" hidden>
+                            </div>
+                            <div id="contacts-upload-status" class="status-msg"></div>
+                        </div>
+
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="ph ph-file-pdf"></i> Base Invitation Template</h3>
+                            </div>
+                            <p class="subtitle">Upload your base PDF or image invitation file.</p>
+                            <div class="upload-area" id="template-upload-area">
+                                <i class="ph ph-file-arrow-up upload-icon"></i>
+                                <p>Drag & Drop or <span class="text-primary">Click to Browse</span></p>
+                                <input type="file" id="template-file-input" accept=".pdf, .jpg, .jpeg, .png" hidden>
+                            </div>
+                            <div id="template-upload-status" class="status-msg"></div>
+                        </div>
+                    </div>
+
+                    <!-- Contacts Table -->
+                    <div class="glass-card table-card">
+                        <div class="table-header-bar">
+                            <div class="table-search">
+                                <i class="ph ph-magnifying-glass"></i>
+                                <input type="text" id="contacts-search-input" placeholder="Search contact by name or number...">
+                            </div>
+                            <div class="table-actions">
+                                <button class="btn btn-secondary" onclick="openAddContactModal()" style="width:auto; padding: 0.5rem 1rem;">
+                                    <i class="ph ph-user-plus"></i> Add Contact
+                                </button>
+                                <button class="btn btn-secondary" onclick="loadContacts()" style="width:auto; padding: 0.5rem 1rem;">
+                                    <i class="ph ph-arrows-clockwise"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;">#</th>
+                                        <th>Name</th>
+                                        <th>Phone Number</th>
+                                        <th>Invitation Card</th>
+                                        <th>WhatsApp Status</th>
+                                        <th style="text-align: right;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contacts-table-body">
+                                    <!-- Dynamic rows loaded via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: MESSAGE TEMPLATE -->
+            <section id="tab-message" class="tab-pane">
+                <div class="message-layout">
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3><i class="ph ph-chat-centered-dots"></i> Message Editor</h3>
+                        </div>
+                        <p class="subtitle">Craft the personalized message text. Tags will be dynamically replaced for each recipient.</p>
+
+                        <div class="variable-pills">
+                            <button class="pill-btn" onclick="insertTag('{{name}}')"><i class="ph ph-plus-circle"></i> {{name}}</button>
+                            <button class="pill-btn" onclick="insertTag('{{number}}')"><i class="ph ph-plus-circle"></i> {{number}}</button>
+                            <span class="pill-divider">|</span>
+                            <button class="pill-btn" onclick="insertEmoji('🌸')">🌸</button>
+                            <button class="pill-btn" onclick="insertEmoji('💐')">💐</button>
+                            <button class="pill-btn" onclick="insertEmoji('🪔')">🪔</button>
+                            <button class="pill-btn" onclick="insertEmoji('✨')">✨</button>
+                            <button class="pill-btn" onclick="insertEmoji('🙏')">🙏</button>
+                            <button class="pill-btn" onclick="insertEmoji('💍')">💍</button>
+                        </div>
+
+                        <textarea id="message-template-input" rows="12" class="message-textarea"></textarea>
+
+                        <div class="message-save-bar">
+                            <span id="message-status-text" class="status-msg"></span>
+                            <button class="btn btn-primary" onclick="saveMessageTemplate()" id="btn-save-message" style="width:auto; padding:0.6rem 1.5rem;">
+                                <i class="ph ph-floppy-disk"></i> Save Template
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3><i class="ph ph-device-mobile"></i> Live WhatsApp Message Preview</h3>
+                        </div>
+                        <p class="subtitle">Sample rendering for contact: <strong id="preview-contact-name">શ્રી રમેશભાઈ પટેલ</strong></p>
+
+                        <div class="whatsapp-mock-bubble">
+                            <div class="bubble-header">
+                                <span class="sender-name">INVITO System</span>
+                            </div>
+                            <div class="bubble-body" id="whatsapp-bubble-text">
+                                <!-- Dynamic rendered message preview -->
+                            </div>
+                            <div class="bubble-footer">
+                                <span class="bubble-time" id="bubble-timestamp">12:00 PM</span>
+                                <i class="ph ph-checks text-blue"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: GENERATION & GALLERY -->
+            <section id="tab-generation" class="tab-pane">
+                <div class="glass-card generation-hero">
+                    <div class="hero-left">
+                        <h2>Batch Invitation Generator</h2>
+                        <p>Generate high-resolution personalized PDFs for all contacts in your Excel sheet with a single click.</p>
+                    </div>
+                    <div class="hero-right">
+                        <button class="btn btn-primary" onclick="startBatchGeneration()" id="btn-batch-gen">
+                            <i class="ph ph-play-circle"></i> Generate All Cards
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadAllZip()" id="btn-zip-download">
+                            <i class="ph ph-file-zip"></i> Download All as ZIP
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Progress Bar Card -->
+                <div class="glass-card progress-card" id="progress-card" style="display: none;">
+                    <div class="progress-info">
+                        <span id="progress-label">Generating invitations...</span>
+                        <span id="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-sub" id="progress-sub">Processing: 0 / 0</div>
+                </div>
+
+                <!-- Generated Cards Gallery -->
+                <div class="glass-card gallery-card">
+                    <div class="table-header-bar">
+                        <h3><i class="ph ph-images"></i> Generated Invitations Gallery (<span id="gallery-count">0</span>)</h3>
+                        <button class="btn btn-secondary" onclick="loadGeneratedFiles()" style="width:auto; padding: 0.4rem 0.8rem;">
+                            <i class="ph ph-arrows-clockwise"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="gallery-grid" id="gallery-grid">
+                        <!-- Dynamic invitation cards -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 6: WHATSAPP DISPATCHER -->
+            <section id="tab-dispatcher" class="tab-pane">
+                <div class="dispatcher-modes-bar">
+                    <button class="mode-tab-btn active" id="btn-mode-queue" onclick="setDispatcherMode('queue')">
+                        <i class="ph ph-paper-plane-tilt"></i> Interactive Web Queue (No Selenium Required)
+                    </button>
+                    <button class="mode-tab-btn" id="btn-mode-runner" onclick="setDispatcherMode('runner')">
+                        <i class="ph ph-robot"></i> Automated Background Runner (Selenium)
+                    </button>
+                </div>
+
+                <!-- MODE A: Web Queue -->
+                <div id="dispatcher-queue-view">
+                    <div class="glass-card queue-hero">
+                        <div>
+                            <h3><i class="ph ph-queue"></i> Web WhatsApp Sender Queue</h3>
+                            <p class="subtitle">Click "Send on WhatsApp Web" for each contact to open their chat directly with pre-filled message!</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-whatsapp" onclick="dispatchNextInQueue()" id="btn-dispatch-next" style="width:auto; padding:0.6rem 1.5rem;">
+                                <i class="ph ph-paper-plane-right"></i> Send Next in Queue
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;">#</th>
+                                        <th>Recipient Name</th>
+                                        <th>Phone Number</th>
+                                        <th>Personalized Message Preview</th>
+                                        <th>Invitation Card</th>
+                                        <th>Sent Status</th>
+                                        <th style="text-align: right;">Dispatch Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="queue-table-body">
+                                    <!-- Dynamic queue rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODE B: Automated Runner -->
+                <div id="dispatcher-runner-view" style="display: none;">
+                    <div class="content-grid">
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="ph ph-rocket-launch"></i> Automated Automation Engine</h3>
+                            </div>
+                            <p class="subtitle">Runs local Selenium Chrome instance to automate sending.</p>
+                            
+                            <div class="options">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="runner-no-preview" checked>
+                                    <span class="slider"></span>
+                                    <span class="label-text">No Preview (Fully Automate)</span>
+                                </label>
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" onclick="runAutomatedProcess('full')" id="btn-runner-full">
+                                    <i class="ph ph-play-circle"></i> Full Flow (Create & Send)
+                                </button>
+                                <button class="btn btn-secondary" onclick="runAutomatedProcess('create')" id="btn-runner-create">
+                                    <i class="ph ph-palette"></i> Create Only
+                                </button>
+                                <button class="btn btn-secondary" onclick="runAutomatedProcess('send')" id="btn-runner-send">
+                                    <i class="ph ph-paper-plane-right"></i> Send Only
+                                </button>
+                                <button class="btn btn-secondary" onclick="runAutomatedProcess('message')" id="btn-runner-message">
+                                    <i class="ph ph-chat-text"></i> Message Only
+                                </button>
+                                <button class="btn btn-danger" onclick="stopAutomatedProcess()" id="btn-runner-stop" disabled>
+                                    <i class="ph ph-stop-circle"></i> Stop Automation
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="terminal-card glass-card">
+                            <div class="terminal-header">
+                                <div class="window-controls">
+                                    <span class="close"></span>
+                                    <span class="min"></span>
+                                    <span class="max"></span>
+                                </div>
+                                <span class="terminal-title">whatsapp_sender.log</span>
+                                <button class="btn-icon" onclick="clearTerminal()" title="Clear Terminal"><i class="ph ph-trash"></i></button>
+                            </div>
+                            <div class="terminal-body" id="terminal-body">
+                                <div class="log-line system">Automated runner idle. Logs will stream here...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 7: SETTINGS & DEPLOY -->
+            <section id="tab-settings" class="tab-pane">
+                <div class="settings-grid">
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3><i class="ph ph-globe"></i> Web Server & LAN Access</h3>
+                        </div>
+                        <p class="subtitle">How to access this web application from your mobile phone or other computers.</p>
+
+                        <div class="settings-content">
+                            <p>To access this invitation web suite from your smartphone, tablet, or another computer on the same Wi-Fi network:</p>
+                            <ol class="settings-list">
+                                <li>Run the app on your host machine: <code>python app.py</code></li>
+                                <li>Find your computer's local IP address (e.g., <code>192.168.1.15</code>)</li>
+                                <li>Open your mobile browser and navigate to: <code>http://192.168.1.15:5000/</code></li>
+                                <li>You can now upload contacts, design the position, generate PDFs, and dispatch directly on mobile WhatsApp!</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3><i class="ph ph-cloud"></i> Cloud Deployment</h3>
+                        </div>
+                        <p class="subtitle">Deploy to cloud services (Render, Railway, Heroku, VPS).</p>
+
+                        <div class="settings-content">
+                            <p>This web app is 100% cloud-ready. It uses standard Flask and PyMuPDF:</p>
+                            <ul class="settings-list">
+                                <li><strong>Port configuration:</strong> Reads <code>$PORT</code> environment variable automatically.</li>
+                                <li><strong>Render / Railway:</strong> Set Start Command: <code>python app.py</code> or <code>waitress-serve --port=$PORT app:app</code></li>
+                                <li><strong>Zero Tkinter constraint:</strong> The visual canvas position editor runs completely in the browser!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL: Add / Edit Contact -->
+    <div class="modal-backdrop" id="contact-modal" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-title"><i class="ph ph-user-plus"></i> Add New Contact</h3>
+                <button class="btn-icon" onclick="closeContactModal()"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modal-contact-id" value="">
+                <div class="form-group">
+                    <label for="modal-contact-name">Contact Full Name</label>
+                    <input type="text" id="modal-contact-name" class="input-text" placeholder="e.g. શ્રી રમેશભાઈ પટેલ">
+                </div>
+                <div class="form-group">
+                    <label for="modal-contact-number">Phone Number (with Country Code)</label>
+                    <input type="text" id="modal-contact-number" class="input-text" placeholder="e.g. 919876543210">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeContactModal()" style="width: auto;">Cancel</button>
+                <button class="btn btn-primary" onclick="submitContactModal()" style="width: auto;">Save Contact</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Exact PDF Preview -->
+    <div class="modal-backdrop" id="preview-modal" style="display: none;">
+        <div class="modal-card preview-modal-card">
+            <div class="modal-header">
+                <h3><i class="ph ph-file-pdf"></i> Exact Invitation Preview</h3>
+                <button class="btn-icon" onclick="closePreviewModal()"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body modal-preview-body">
+                <div id="preview-loading" class="canvas-loader" style="display: none;">
+                    <i class="ph ph-spinner ph-spin"></i>
+                    <span>Rendering high-resolution preview...</span>
+                </div>
+                <img id="preview-modal-img" src="" alt="Invitation Preview" class="preview-img-responsive">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePreviewModal()" style="width: auto;">Close</button>
+                <button class="btn btn-primary" onclick="saveNamePosition(); closePreviewModal();" style="width: auto;">Save This Position</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

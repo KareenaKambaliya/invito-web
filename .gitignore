@@ -1,0 +1,39 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Build artifacts
+build/
+dist/
+*.spec
+
+# Chrome profile (contains WhatsApp session data - sensitive!)
+chrome_profile/
+
+# Debug files
+debug_whatsapp/
+
+# Logs
+*.log
+
+# Message queue data
+message_queue/
+
+# Large PDF files (ignore generated, keep base template)
+invitations/
+*.pdf
+!template.pdf
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+Thumbs.db
+.DS_Store
